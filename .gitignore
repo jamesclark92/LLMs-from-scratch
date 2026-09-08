@@ -351,3 +351,4 @@ cython_debug/
 .pixi
 *.egg-info
 
+/.idea/
