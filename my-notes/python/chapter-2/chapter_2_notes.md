@@ -1,5 +1,21 @@
 # Chapter 2 notes
 
+## The input-prep pipeline (chapter overview)
+
+![Input preparation: text → tokens → token IDs → embeddings](figure_2_15_input_prep.png)
+
+Everything in this chapter is one leg of this chain:
+
+`Input text → Tokenized text → Token IDs → Token embeddings → (GPT-like transformer)`
+
+- **Tokenize** — `simple_tokenizer_demo.py` (from-scratch word-level) and the BPE step in `bpe_pipeline.py`.
+- **IDs → training batches** — `gpt_dataset.py` slices the IDs into `(input, target)` windows (see below).
+- **IDs → embeddings** — `bpe_pipeline.py`, the final token + positional embedding step.
+
+The token-IDs → embeddings step is a lookup table; *why* that lookup is really a
+matrix multiply (and how it scales to a whole sentence at once) is drawn in
+[`../../one_hot_lookup.svg`](../../one_hot_lookup.svg).
+
 ## Sliding window: `max_length` vs `stride`
 
 Two separate knobs in `GPTDatasetV1`:
