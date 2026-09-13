@@ -4,7 +4,7 @@ import torch
 
 class SelfAttention_v1(nn.Module):
     # v1: weights held as raw nn.Parameter tensors, matmul done by hand.
-    # See self-attention-v2.py for v2, which improves on this.
+    # See self_attention_v2.py for v2, which improves on this.
 
     def __init__(self, d_in, d_out):
         super().__init__()

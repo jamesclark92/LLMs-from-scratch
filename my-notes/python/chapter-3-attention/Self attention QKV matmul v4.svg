@@ -14,7 +14,7 @@
 </style>
 <text class="th" x="350" y="28" text-anchor="middle">Self-attention as matrix multiplies — from token IDs to output</text>
 <text class="ts" x="350" y="46" text-anchor="middle">Same math as the step-by-step version, batched over all six tokens. Row 2 (highlighted) = the z⁽²⁾ from before.</text>
-<text class="sh" x="40" y="80">⓪ Embedding lookup:  X = OneHot · E</text>
+<text class="th" x="40" y="80">Step 1 · Embedding lookup:  X = OneHot · E</text>
 <text class="ts" x="40" y="98">E is the learned embedding table. A one-hot row selects one row of E; stacking six one-hots gives X.</text>
 <g class="oh0"><rect x="86" y="126" width="16" height="18" rx="5" stroke-width="0.6"/><text class="t" style="font-size:10px" x="94" y="135" text-anchor="middle" dominant-baseline="central">0</text></g>
 <g class="oh1"><rect x="106" y="126" width="16" height="18" rx="5" stroke-width="0.6"/><text class="t" style="font-size:10px" x="114" y="135" text-anchor="middle" dominant-baseline="central">1</text></g>
@@ -130,7 +130,7 @@
 <text class="ts" style="font-size:10px;fill:#888" x="546.0" y="270" text-anchor="middle">X (6×3)</text>
 <text class="ts" style="font-size:10px;fill:#888" x="350" y="310" text-anchor="middle">Toy vocab of 7 shown; a real table has ~50,000 rows. (Row 2 = journey → picks E’s journey row = x⁽²⁾.)</text>
 <line x1="350" y1="320" x2="350" y2="342" class="arr" marker-end="url(#arrow)"/>
-<text class="sh" x="40" y="372">① Project every token at once:  Q = X·W_q,  K = X·W_k,  V = X·W_v</text>
+<text class="th" x="40" y="372">Step 2 · Project every token at once:  Q = X·W_q,  K = X·W_k,  V = X·W_v</text>
 <text class="ts" x="40" y="390">Each output row is x⁽ⁱ⁾·W — the same projection done to all six tokens in one matmul, not six.</text>
 <g class="c-gray"><rect x="44" y="556" width="36" height="16" rx="5" stroke-width="0.5"/><text class="t" style="font-size:11px" x="62" y="564" text-anchor="middle" dominant-baseline="central">0.43</text></g>
 <g class="c-gray"><rect x="84" y="556" width="36" height="16" rx="5" stroke-width="0.5"/><text class="t" style="font-size:11px" x="102" y="564" text-anchor="middle" dominant-baseline="central">0.15</text></g>
@@ -232,7 +232,7 @@
 <text class="ts" style="font-size:10px;fill:#888" x="424" y="783" dominant-baseline="central">v⁵</text>
 <text class="ts" style="font-size:10px;fill:#888" x="424" y="803" dominant-baseline="central">v⁶</text>
 <line x1="350" y1="836" x2="350" y2="858" class="arr" marker-end="url(#arrow)"/>
-<text class="sh" x="40" y="886">② All query·key scores at once:  S = Q·Kᵀ / √dₖ   (6×6)</text>
+<text class="th" x="40" y="886">Step 3 · Calc attention scores · all query·key pairs at once:  S = Q·Kᵀ / √dₖ   (6×6)</text>
 <text class="ts" x="40" y="904">Q(6×2)·Kᵀ(2×6) = S(6×6). Cell (i,j) = query i (row) scored against key j (column).</text>
 <text class="ts" x="40" y="920">Kᵀ = K with rows and columns swapped (T = transpose): the 6×2 becomes 2×6.</text>
 <text class="ts" x="40" y="936">We transpose so the shared dim (2) lines up, so each query row can dot each key column.</text>
@@ -307,7 +307,7 @@
 <text class="tag" x="206" y="1036" text-anchor="end" fill="#555">query↓ / key→</text>
 <text class="ts" x="350" y="1214" text-anchor="middle" fill="#d59a2f">Row 2 = [0.31 0.52 0.52 0.29 0.28 0.36] — the six ω₂ᵢ scores from v4 Step 3.</text>
 <line x1="350" y1="1224" x2="350" y2="1246" class="arr" marker-end="url(#arrow)"/>
-<text class="sh" x="40" y="1276">③ Row-wise softmax:  A = softmax(S)   (6×6)</text>
+<text class="th" x="40" y="1276">Step 4 · Calc attention weights · row-wise softmax:  A = softmax(S)   (6×6)</text>
 <text class="ts" x="40" y="1294">Softmax each row on its own → every row is positive and sums to 1. Row 2 = the attention weights α₂ᵢ.</text>
 <text class="ts" style="font-size:10px;fill:#888" x="233" y="1312" text-anchor="middle">x⁽¹⁾</text>
 <text class="ts" style="font-size:10px;fill:#888" x="279" y="1312" text-anchor="middle">x⁽²⁾</text>
@@ -359,7 +359,7 @@
 <text class="ts" style="font-size:10px;fill:#888" x="206" y="1459" text-anchor="end" dominant-baseline="central">x⁽⁶⁾</text>
 <text class="ts" style="font-size:11px" x="496" y="1355" dominant-baseline="central" fill="#2fa89b">→ 1.00</text>
 <line x1="350" y1="1482" x2="350" y2="1504" class="arr" marker-end="url(#arrow)"/>
-<text class="sh" x="40" y="1532">④ Weighted sum of values:  Z = A·V   (6×2)</text>
+<text class="th" x="40" y="1532">Step 5 · Calc context vectors · weighted sum of values:  Z = A·V   (6×2)</text>
 <text class="ts" x="40" y="1550">A(6×6)·V(6×2) = Z(6×2). Each row = that token’s weights times V — all six context vectors at once.</text>
 <text class="tag" x="350" y="1566" text-anchor="middle" fill="#2fa89b">Z (6×2)</text>
 <g class="c-teal"><rect x="296" y="1574" width="50" height="22" rx="5" stroke-width="0.5"/><text class="t" style="font-size:11px" x="321" y="1585" text-anchor="middle" dominant-baseline="central">0.36</text></g>

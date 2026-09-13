@@ -52,7 +52,7 @@
 <text class="ts" x="40" y="200" fill="#7F77DD">query = x⁽²⁾ (“journey”), shown in purple — compared against all inputs</text>
 <line x1="340" y1="208" x2="340" y2="232" class="arr" marker-end="url(#arrow)"/>
 
-<text class="th" x="40" y="252">Step 2 · Dot product:  ω₂ᵢ = x⁽²⁾ · x⁽ⁱ⁾</text>
+<text class="th" x="40" y="252">Step 2 · Calc attention scores · Dot product:  ω₂ᵢ = x⁽²⁾ · x⁽ⁱ⁾</text>
 <text class="ts" x="40" y="270">Dot the query with each input, element-wise then summed. Larger = more aligned.</text>
 <g class="c-teal"><rect x="40" y="280" width="600" height="46" rx="8" stroke-width="0.5"/>
 <text class="ts" x="52" y="299" dominant-baseline="central">Example — x⁽⁵⁾ (“one”) = [0.77, 0.25, 0.10]:</text>
@@ -74,7 +74,7 @@
 <text class="ts" x="590" y="406" text-anchor="middle">ω₂₆</text>
 <line x1="340" y1="414" x2="340" y2="438" class="arr" marker-end="url(#arrow)"/>
 
-<text class="th" x="40" y="458">Step 3 · Softmax:  α₂ᵢ = softmax(ω₂)ᵢ</text>
+<text class="th" x="40" y="458">Step 3 · Calc attention weights · Softmax:  α₂ᵢ = softmax(ω₂)ᵢ</text>
 <text class="ts" x="40" y="476">Exponentiate each score, divide by the total. Weights are positive and sum to 1.</text>
 <g class="c-amber"><rect x="40" y="486" width="600" height="46" rx="8" stroke-width="0.5"/>
 <text class="ts" x="52" y="505" dominant-baseline="central">Example — Σe^ω = e^0.95+e^1.50+e^1.48+e^0.84+e^0.71+e^1.09 = 18.75:</text>
@@ -97,7 +97,7 @@
 <text class="ts" x="340" y="632" text-anchor="middle">α₂₁ + α₂₂ + … + α₂₆ = 1.00</text>
 <line x1="340" y1="640" x2="340" y2="664" class="arr" marker-end="url(#arrow)"/>
 
-<text class="th" x="40" y="684">Step 4 · Weighted sum, the way the code does it:  z⁽²⁾ = Σ α₂ᵢ · x⁽ⁱ⁾</text>
+<text class="th" x="40" y="684">Step 4 · Calc context vector · Weighted sum:  z⁽²⁾ = Σ α₂ᵢ · x⁽ⁱ⁾</text>
 <text class="ts" x="40" y="702">One row per loop pass. Each pass scales a whole token vector and adds it into the running total.</text>
 <g class="c-code"><rect x="40" y="714" width="600" height="88" rx="8" stroke-width="0.5"/>
 <text class="code" x="54" y="734" dominant-baseline="central" xml:space="preserve">query = inputs[1]</text>

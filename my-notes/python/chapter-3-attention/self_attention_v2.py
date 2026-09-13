@@ -3,7 +3,7 @@ import torch
 
 
 class SelfAttention_v2(nn.Module):
-    # Improves on v1 (see self-attention-v1.py) by swapping the raw
+    # Improves on v1 (see self_attention_v1.py) by swapping the raw
     # nn.Parameter weights for nn.Linear layers:
     #   - nn.Linear owns the (d_out, d_in) weight and applies x @ W.T, so
     #     forward just calls the layer instead of using the @ operator
