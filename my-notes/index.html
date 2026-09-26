@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Notes</title>
+<!-- Renders notes.md. Edit notes.md, then reload. Needs an http server (e.g. IntelliJ's localhost:63342), not file://. -->
+<script>try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<style>
+:root{--bg:#f7f7f5;--panel:#fff;--ink:#1c1c1c;--muted:#5d6166;--line:#e2e2de;--accent:#4f46e5;--soft:#eef0ff;--code:#f2f3f5;
+--c1:#e0f2fe;--c2:#dcfce7;--c3:#ede9fe;--c4:#fef3c7;--side:270px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15161a;--panel:#1c1d22;--ink:#e7e7e4;--muted:#a2a6ad;--line:#2d2f36;--accent:#a5a8ff;--soft:#272a45;--code:#24262c;
+--c1:#0c3a52;--c2:#12432a;--c3:#342a5c;--c4:#4a3a0e}}
+:root[data-theme="dark"]{--bg:#15161a;--panel:#1c1d22;--ink:#e7e7e4;--muted:#a2a6ad;--line:#2d2f36;--accent:#a5a8ff;--soft:#272a45;--code:#24262c;
+--c1:#0c3a52;--c2:#12432a;--c3:#342a5c;--c4:#4a3a0e}
+/* SVGs have hard-coded light colours: invert them in dark mode */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure img{filter:invert(1) hue-rotate(180deg)}}
+:root[data-theme="dark"] figure img{filter:invert(1) hue-rotate(180deg)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent)}
+nav{position:fixed;inset:0 auto 0 0;width:var(--side);border-right:1px solid var(--line);padding:18px 10px;overflow-y:auto;background:var(--panel);font-size:13px}
+nav .top{display:flex;align-items:center;justify-content:space-between;margin:0 6px 10px}
+nav .top b{font-size:14px}
+nav button{font:inherit;background:none;border:1px solid var(--line);color:var(--ink);border-radius:6px;padding:3px 8px;cursor:pointer}
+nav a{display:block;color:var(--ink);text-decoration:none;padding:3px 8px;border-radius:5px;line-height:1.35}
+nav a.h1{font-weight:650;margin-top:12px}
+nav a.h2{padding-left:18px;color:var(--muted)}
+nav a:hover{background:var(--soft)}
+nav a.active{background:var(--soft);color:var(--accent)}
+main{margin-left:var(--side);padding:24px 32px 120px}
+article{max-width:880px;margin:0 auto}
+h1{font-size:26px;margin:48px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+article>h1:first-child{margin-top:0}
+h2{font-size:19px;margin:36px 0 8px}
+h3{font-size:16px}
+code{background:var(--code);padding:1px 5px;border-radius:4px;font-size:.9em}
+pre{background:var(--code);padding:12px 14px;border-radius:8px;overflow-x:auto;line-height:1.45}
+pre code{background:none;padding:0}
+table{border-collapse:collapse;margin:12px 0;font-size:14px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:5px 10px;text-align:left}
+th{background:var(--soft)}
+blockquote{margin:16px 0;padding:10px 14px;border-left:4px solid var(--accent);background:var(--soft);border-radius:0 8px 8px 0}
+blockquote p{margin:0}
+hr{border:0;border-top:1px solid var(--line);margin:40px 0}
+figure{margin:16px 0;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px}
+figure img{display:block;width:100%;height:auto;cursor:zoom-in}
+figure.narrow{max-width:620px}
+iframe.interactive{width:100%;height:640px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.pipeline{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:16px 0;font-size:13px;color:var(--muted)}
+.pipeline span,.tag{color:var(--ink);padding:5px 10px;border-radius:6px;white-space:nowrap}
+.tag{font-size:12px;padding:2px 8px;margin-right:4px}
+.ch1{background:var(--c1)}.ch2{background:var(--c2)}.ch3{background:var(--c3)}.ch4{background:var(--c4)}
+#err{color:#b91c1c}
+@media (max-width:800px){nav{position:static;width:auto;border-right:0;border-bottom:1px solid var(--line);max-height:40vh}main{margin-left:0;padding:16px}}
+</style>
+</head>
+<body>
+<nav><div class="top"><b>LLM notes</b><button id="theme" aria-label="Toggle theme">◐</button></div><div id="toc"></div></nav>
+<main><article id="doc">Loading notes.md…</article></main>
+<script>
+const slug = s => s.toLowerCase().replace(/<[^>]+>/g,'').replace(/[^\w]+/g,'-').replace(/^-|-$/g,'');
+fetch('notes.md', {cache:'no-store'}).then(r => { if (!r.ok) throw Error(r.status); return r.text(); }).then(md => {
+  const doc = document.getElementById('doc');
+  doc.innerHTML = marked.parse(md);
+  const toc = document.getElementById('toc'), seen = {};
+  doc.querySelectorAll('h1,h2').forEach(h => {
+    let id = slug(h.textContent); if (seen[id]) id += '-' + seen[id]++; else seen[id] = 1;
+    h.id = id;
+    const a = document.createElement('a');
+    a.href = '#' + id; a.textContent = h.textContent; a.className = h.tagName.toLowerCase();
+    toc.appendChild(a);
+  });
+  doc.querySelectorAll('figure img').forEach(img => img.onclick = () => window.open(img.src));
+  const links = [...toc.querySelectorAll('a')];
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting)
+    links.forEach(a => a.classList.toggle('active', a.hash === '#' + e.target.id)); }), {rootMargin:'-5% 0px -85% 0px'});
+  doc.querySelectorAll('h1,h2').forEach(h => io.observe(h));
+  if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+}).catch(e => { document.getElementById('doc').innerHTML =
+  `<p id="err">Couldn't load notes.md (${e.message}). Open this page through a web server (IntelliJ's built-in one, or <code>python3 -m http.server</code> in my-notes/), not as a file.</p>`; });
+document.getElementById('theme').onclick = () => {
+  const r = document.documentElement, dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme:dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark';
+  try { localStorage.setItem('theme', r.dataset.theme); } catch (e) {}
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 2 · Working with text data</title>
+<script>try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+<style>
+:root{--bg:#f7f7f5;--panel:#ffffff;--ink:#1c1c1c;--muted:#5d6166;--line:#e2e2de;--accent:#4f46e5;--accent-soft:#eef0ff;
+--code-bg:#f2f3f5;--card:transparent;--side-w:280px;--callout-ink:#1c1c1c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15161a;--panel:#1c1d22;--ink:#e7e7e4;--muted:#a2a6ad;--line:#2d2f36;--accent:#a5a8ff;--accent-soft:#272a45;--code-bg:#24262c;--card:transparent}}
+:root[data-theme="dark"]{--bg:#15161a;--panel:#1c1d22;--ink:#e7e7e4;--muted:#a2a6ad;--line:#2d2f36;--accent:#a5a8ff;--accent-soft:#272a45;--code-bg:#24262c;--card:transparent}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) figure.dg svg{filter:invert(1) hue-rotate(180deg)}}
+:root[data-theme="dark"] figure.dg svg{filter:invert(1) hue-rotate(180deg)}
+.theme{font:inherit;font-size:13px;background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer;margin:0 8px 16px}
+.theme:hover{background:var(--accent-soft)}
+.topbar .theme{margin:0 0 0 auto;width:40px;height:36px;padding:0;font-size:16px;flex:none}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%}
+code,pre{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em}
+p code,li code,h3 code,h4 code,td code{background:var(--code-bg);padding:.1em .35em;border-radius:4px}
+pre{background:var(--code-bg);padding:12px 14px;border-radius:8px;overflow-x:auto;line-height:1.5}
+a{color:var(--accent)}
+/* sidebar */
+.side{position:fixed;inset:0 auto 0 0;width:var(--side-w);background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:20px 14px 40px;z-index:20}
+.side .brand{font-weight:700;font-size:15px;margin:0 8px 2px}
+.side .sub{color:var(--muted);font-size:13px;margin:0 8px 16px}
+.side ol{list-style:none;margin:0;padding:0}
+.side a{display:block;text-decoration:none;color:var(--ink);padding:6px 8px;border-radius:6px;font-size:14px;line-height:1.35}
+.side a:hover{background:var(--accent-soft)}
+.side a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.side .file>a::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--accent);margin-right:8px;vertical-align:1px;opacity:.7}
+.side ol ol{margin:2px 0 8px 16px;border-left:1px solid var(--line)}
+.side ol ol a{font-size:13px;color:var(--muted);padding:3px 8px}
+.side ol ol a.active{color:var(--accent);background:none}
+.side .fn{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-left:16px}
+.topbar{display:none}
+main{margin-left:var(--side-w);padding:32px 40px 80px;max-width:calc(var(--side-w) + 900px)}
+main>header h1{font-size:28px;line-height:1.2;margin:0 0 6px}
+main>header p{color:var(--muted);margin:0 0 24px}
+section.fig{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px 28px;margin:0 0 32px}
+section.fig>h2{font-size:22px;line-height:1.25;margin:0 0 4px;overflow-wrap:anywhere}
+h3,h4{overflow-wrap:anywhere}
+section.fig>.src{font-size:12px;color:var(--muted);margin:0 0 14px;font-family:ui-monospace,Menlo,Consolas,monospace}
+section.fig>.lead{color:var(--muted);margin-top:0}
+h3{font-size:17px;margin:28px 0 6px;line-height:1.35}
+h4{font-size:15px;margin:18px 0 4px}
+p{margin:6px 0 10px;overflow-wrap:anywhere}
+p.c{text-align:center;color:var(--muted);font-size:14px}
+p.m{color:var(--muted);font-size:15px}
+figure.dg{margin:10px 0 14px;background:var(--card);border-radius:8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+figure.dg svg{display:block;width:100%;min-width:calc(var(--w) * .8px);height:auto;margin:0 auto}
+.callout{background:var(--cb);border:1px solid var(--cs);border-radius:10px;padding:10px 16px;margin:12px 0;color:var(--callout-ink)}
+.callout h3,.callout h4{margin-top:6px}
+.callout pre{background:transparent;padding:4px 0;margin:4px 0}
+.callout code{background:transparent}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .callout{background:color-mix(in srgb,var(--cb) 12%,var(--panel));border-color:color-mix(in srgb,var(--cs) 60%,var(--panel));color:var(--ink)}}
+:root[data-theme="dark"] .callout{background:color-mix(in srgb,var(--cb) 12%,var(--panel));border-color:color-mix(in srgb,var(--cs) 60%,var(--panel));color:var(--ink)}
+.notes table{border-collapse:collapse;display:block;overflow-x:auto;font-size:14px;margin:10px 0}
+.notes th,.notes td{border:1px solid var(--line);padding:6px 10px;text-align:left;white-space:nowrap}
+.notes blockquote{margin:12px 0;padding:6px 16px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 8px 8px 0}
+.notes h2{font-size:22px;margin:36px 0 8px;padding-top:4px}
+.notes hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+.scrim{display:none}
+@media (max-width:860px){
+  .topbar{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:15;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 16px}
+  .topbar button{font:inherit;background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;width:40px;height:36px;font-size:18px;cursor:pointer}
+  .topbar span{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .side{transform:translateX(-100%);transition:transform .2s ease;width:min(84vw,320px);box-shadow:0 0 30px rgba(0,0,0,.25)}
+  body.menu-open .side{transform:none}
+  body.menu-open .scrim{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:19}
+  main{margin-left:0;padding:16px 16px 60px}
+  html{scroll-padding-top:64px}
+  section.fig{padding:16px 14px;border-radius:10px}
+  main>header h1{font-size:22px}
+  section.fig>h2{font-size:19px}
+  figure.dg{margin-left:-6px;margin-right:-6px}
+}
+
+/* ---- per-figure SVG styles (scoped) ---- */
+.g1 .lbl{font-size: 15px; font-weight: 700;}
+.g1 .num{font-size: 12px; font-weight: 700; fill: #ffffff;}
+.g1 .flow{fill: none; stroke: #7a828b; stroke-width: 2.2;}
+.g1 .sub{font-size: 12px; font-style: italic;}
+
+</style>
+</head>
+<body>
+<div class="topbar"><button aria-label="Open menu">☰</button><span>Chapter 2 · Working with text data</span><button class="theme" aria-label="Toggle light/dark mode"></button></div>
+<div class="scrim"></div>
+<nav class="side" aria-label="Contents">
+<p class="brand">Chapter 2 · Working with text data</p>
+<p class="sub">The Transformer — Encoder / Decoder (companion notes)</p>
+<button class="theme" aria-label="Toggle light/dark mode"></button>
+<ol>
+<li class="file"><a href="#g1">transformer_diagram_v3</a></li>
+<li><a href="#n-key">Key</a></li>
+<li><a href="#n-preprocessing-step-by-step-the-inner-boxes">Preprocessing, step by step (the inner boxes)</a></li>
+<li class="file"><a href="#g2">one_hot_lookup</a></li>
+<li><a href="#n-positional-encoding-how-it-s-done">Positional encoding — how it's done</a></li>
+<li><a href="#n-zoom-in-the-mechanisms">Zoom in: the mechanisms</a></li>
+<li><a href="#n-where-each-half-became-a-real-model-family">Where each half became a real model family</a></li>
+</ol>
+</nav>
+<main>
+<header><h1>Chapter 2 · Working with text data</h1><p>The Transformer — Encoder / Decoder (companion notes)</p></header>
+<section class="fig" id="g1" data-label="transformer_diagram_v3"><h2>The Transformer — Encoder / Decoder</h2><p class="src">transformer_diagram_v3.svg</p>
+<p>Flow runs bottom → top. Numbers &amp; letters are explained in the companion notes (markdown).</p>
+<figure class="dg" style="--w:1060"><svg xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Helvetica, Arial, sans-serif" viewBox="30 32 1060 584" class="g1" role="img"><defs>
+    <marker id="g1-arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#7a828b" />
+    </marker>
+    <marker id="g1-arrb" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#2f6fb3" />
+    </marker>
+  </defs>
+  
+  <rect x="210" y="112" width="180" height="44" rx="7" fill="#eceef0" stroke="#c9ced4" />
+  <text x="300" y="139" text-anchor="middle" class="lbl" fill="#333">Embeddings</text>
+  <circle cx="222" cy="124" r="12" fill="#5b6570" /><text x="222" y="129" text-anchor="middle" class="num">4</text>
+  
+  <rect x="150" y="184" width="300" height="120" rx="12" fill="#d9dde1" stroke="#aab2ba" />
+  <text x="300" y="240" text-anchor="middle" font-size="21" font-weight="700" fill="#333">Encoder</text>
+  <text x="300" y="264" text-anchor="middle" class="sub" fill="#555">self-attention → context vectors</text>
+  <circle cx="168" cy="202" r="13" fill="#5b6570" /><text x="168" y="207" text-anchor="middle" class="num">3</text>
+  
+  <rect x="175" y="332" width="250" height="212" rx="10" fill="#f1f2f4" stroke="#c9ced4" />
+  <circle cx="195" cy="352" r="12" fill="#5b6570" /><text x="195" y="357" text-anchor="middle" class="num">2</text>
+  <text x="308" y="357" text-anchor="middle" class="lbl" fill="#5b6570" font-size="14">Preprocessing</text>
+  <rect x="200" y="366" width="200" height="44" rx="6" fill="#eceef0" stroke="#c9ced4" />
+  <circle cx="216" cy="388" r="9" fill="#5b6570" /><text x="216" y="392" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">c</text>
+  <text x="308" y="393" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Embedding + position</text>
+  <rect x="200" y="430" width="200" height="44" rx="6" fill="#eceef0" stroke="#c9ced4" />
+  <circle cx="216" cy="452" r="9" fill="#5b6570" /><text x="216" y="456" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">b</text>
+  <text x="308" y="457" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Token IDs</text>
+  <rect x="200" y="494" width="200" height="44" rx="6" fill="#eceef0" stroke="#c9ced4" />
+  <circle cx="216" cy="516" r="9" fill="#5b6570" /><text x="216" y="520" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">a</text>
+  <text x="308" y="521" text-anchor="middle" font-size="13" font-weight="600" fill="#333">Tokenize</text>
+  <path class="flow" d="M300,494 L300,476" marker-end="url(#g1-arr)" />
+  <path class="flow" d="M300,430 L300,412" marker-end="url(#g1-arr)" />
+  
+  <rect x="200" y="564" width="200" height="44" rx="7" fill="#ffffff" stroke="#c9ced4" />
+  <text x="300" y="591" text-anchor="middle" class="lbl" fill="#333">Input text</text>
+  <circle cx="212" cy="576" r="12" fill="#5b6570" /><text x="212" y="581" text-anchor="middle" class="num">1</text>
+  
+  <path class="flow" d="M300,564 L300,546" marker-end="url(#g1-arr)" />
+  <path class="flow" d="M300,332 L300,306" marker-end="url(#g1-arr)" />
+  <path class="flow" d="M300,184 L300,158" marker-end="url(#g1-arr)" />
+
+  
+  
+  <rect x="700" y="40" width="200" height="44" rx="7" fill="#ffffff" stroke="#b9d3ea" />
+  <text x="800" y="67" text-anchor="middle" class="lbl" fill="#1c4e80">Complete output</text>
+  <circle cx="712" cy="52" r="12" fill="#2f6fb3" /><text x="712" y="57" text-anchor="middle" class="num">9</text>
+  
+  <rect x="710" y="112" width="180" height="44" rx="7" fill="#e3eefb" stroke="#b9d3ea" />
+  <text x="800" y="133" text-anchor="middle" class="lbl" fill="#1c4e80" font-size="14">Output layers</text>
+  <text x="800" y="149" text-anchor="middle" class="sub" fill="#1c4e80">softmax</text>
+  <circle cx="722" cy="124" r="12" fill="#2f6fb3" /><text x="722" y="129" text-anchor="middle" class="num">8</text>
+  
+  <rect x="650" y="184" width="300" height="120" rx="12" fill="#cfe2f3" stroke="#9cc2e2" />
+  <text x="800" y="240" text-anchor="middle" font-size="21" font-weight="700" fill="#1c4e80">Decoder</text>
+  <text x="800" y="264" text-anchor="middle" class="sub" fill="#1c4e80">self-attention + cross-attention</text>
+  <circle cx="668" cy="202" r="13" fill="#2f6fb3" /><text x="668" y="207" text-anchor="middle" class="num">7</text>
+  
+  <rect x="517" y="326" width="432" height="222" rx="10" fill="#f4f8fd" stroke="#b9d3ea" />
+  <circle cx="535" cy="346" r="12" fill="#2f6fb3" /><text x="535" y="351" text-anchor="middle" class="num">6</text>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <rect x="700" y="564" width="200" height="44" rx="7" fill="#ffffff" stroke="#b9d3ea" />
+  <text x="800" y="591" text-anchor="middle" class="lbl" fill="#1c4e80">Partial output</text>
+  <circle cx="712" cy="576" r="12" fill="#2f6fb3" /><text x="712" y="581" text-anchor="middle" class="num">5</text>
+  
+  <path class="flow" d="M800,564 L800,546" marker-end="url(#g1-arr)" />
+  
+  <path class="flow" d="M800,184 L800,158" marker-end="url(#g1-arr)" />
+  <path class="flow" d="M800,112 L800,86" marker-end="url(#g1-arr)" />
+
+  
+  <path class="flow" stroke="#2f6fb3" d="M390,134 L520,134 L520,244 L650,244" marker-end="url(#g1-arrb)" />
+  <text x="398" y="126" font-size="12" font-weight="700" fill="#2f6fb3">cross-attention</text>
+
+  
+  <text x="660.0" y="352.0" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5b6570" font-weight="600">= Input embeddings</text>
+  <text x="671.0" y="358.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" fill="#5b6570" font-weight="400">=</text>
+  <rect x="682.0" y="336" width="20" height="24" rx="2" fill="#e3eefb" stroke="#2f6fb3" stroke-width="1" />
+  <text x="692.0" y="352.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#1a3d7c" font-weight="700">.2</text>
+  <rect x="702.0" y="336" width="20" height="24" rx="2" fill="#e3eefb" stroke="#2f6fb3" stroke-width="1" />
+  <text x="712.0" y="352.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#1a3d7c" font-weight="700">.8</text>
+  <rect x="722.0" y="336" width="20" height="24" rx="2" fill="#e3eefb" stroke="#2f6fb3" stroke-width="1" />
+  <text x="732.0" y="352.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#1a3d7c" font-weight="700">.3</text>
+  <rect x="770.0" y="336" width="20" height="24" rx="2" fill="#e3eefb" stroke="#2f6fb3" stroke-width="1" />
+  <text x="780.0" y="352.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#1a3d7c" font-weight="700">.6</text>
+  <rect x="790.0" y="336" width="20" height="24" rx="2" fill="#e3eefb" stroke="#2f6fb3" stroke-width="1" />
+  <text x="800.0" y="352.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#1a3d7c" font-weight="700">.4</text>
+  <rect x="810.0" y="336" width="20" height="24" rx="2" fill="#e3eefb" stroke="#2f6fb3" stroke-width="1" />
+  <text x="820.0" y="352.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#1a3d7c" font-weight="700">1.1</text>
+  <rect x="858.0" y="336" width="20" height="24" rx="2" fill="#e3eefb" stroke="#2f6fb3" stroke-width="1" />
+  <text x="868.0" y="352.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#1a3d7c" font-weight="700">1.1</text>
+  <rect x="878.0" y="336" width="20" height="24" rx="2" fill="#e3eefb" stroke="#2f6fb3" stroke-width="1" />
+  <text x="888.0" y="352.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#1a3d7c" font-weight="700">.7</text>
+  <rect x="898.0" y="336" width="20" height="24" rx="2" fill="#e3eefb" stroke="#2f6fb3" stroke-width="1" />
+  <text x="908.0" y="352.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#1a3d7c" font-weight="700">.6</text>
+  <line x1="800.0" y1="334" x2="800.0" y2="310" stroke="#7a828b" stroke-width="1.8" />
+  <path d="M 796.0 311 L 804.0 311 L 800.0 304 Z" fill="#7a828b" />
+  <text x="660.0" y="394.0" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5b6570" font-weight="600">+ Positional embeddings</text>
+  <text x="671.0" y="400.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="20" fill="#5b6570" font-weight="400">+</text>
+  <rect x="682.0" y="378" width="20" height="24" rx="2" fill="#fff7e6" stroke="#d9b45f" stroke-width="1" />
+  <text x="692.0" y="394.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#8a6d1f" font-weight="400">.0</text>
+  <rect x="702.0" y="378" width="20" height="24" rx="2" fill="#fff7e6" stroke="#d9b45f" stroke-width="1" />
+  <text x="712.0" y="394.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#8a6d1f" font-weight="400">.1</text>
+  <rect x="722.0" y="378" width="20" height="24" rx="2" fill="#fff7e6" stroke="#d9b45f" stroke-width="1" />
+  <text x="732.0" y="394.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#8a6d1f" font-weight="400">.2</text>
+  <rect x="770.0" y="378" width="20" height="24" rx="2" fill="#fff7e6" stroke="#d9b45f" stroke-width="1" />
+  <text x="780.0" y="394.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#8a6d1f" font-weight="400">.1</text>
+  <rect x="790.0" y="378" width="20" height="24" rx="2" fill="#fff7e6" stroke="#d9b45f" stroke-width="1" />
+  <text x="800.0" y="394.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#8a6d1f" font-weight="400">.2</text>
+  <rect x="810.0" y="378" width="20" height="24" rx="2" fill="#fff7e6" stroke="#d9b45f" stroke-width="1" />
+  <text x="820.0" y="394.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#8a6d1f" font-weight="400">.3</text>
+  <rect x="858.0" y="378" width="20" height="24" rx="2" fill="#fff7e6" stroke="#d9b45f" stroke-width="1" />
+  <text x="868.0" y="394.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#8a6d1f" font-weight="400">.2</text>
+  <rect x="878.0" y="378" width="20" height="24" rx="2" fill="#fff7e6" stroke="#d9b45f" stroke-width="1" />
+  <text x="888.0" y="394.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#8a6d1f" font-weight="400">.3</text>
+  <rect x="898.0" y="378" width="20" height="24" rx="2" fill="#fff7e6" stroke="#d9b45f" stroke-width="1" />
+  <text x="908.0" y="394.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#8a6d1f" font-weight="400">.4</text>
+  <text x="660.0" y="436.0" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5b6570" font-weight="600">Token embeddings</text>
+  <rect x="682.0" y="420" width="20" height="24" rx="2" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="692.0" y="436.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#444" font-weight="400">.2</text>
+  <rect x="702.0" y="420" width="20" height="24" rx="2" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="712.0" y="436.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#444" font-weight="400">.7</text>
+  <rect x="722.0" y="420" width="20" height="24" rx="2" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="732.0" y="436.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#444" font-weight="400">.1</text>
+  <rect x="770.0" y="420" width="20" height="24" rx="2" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="780.0" y="436.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#444" font-weight="400">.5</text>
+  <rect x="790.0" y="420" width="20" height="24" rx="2" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="800.0" y="436.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#444" font-weight="400">.2</text>
+  <rect x="810.0" y="420" width="20" height="24" rx="2" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="820.0" y="436.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#444" font-weight="400">.8</text>
+  <rect x="858.0" y="420" width="20" height="24" rx="2" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="868.0" y="436.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#444" font-weight="400">.9</text>
+  <rect x="878.0" y="420" width="20" height="24" rx="2" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="888.0" y="436.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#444" font-weight="400">.4</text>
+  <rect x="898.0" y="420" width="20" height="24" rx="2" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="908.0" y="436.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#444" font-weight="400">.2</text>
+  <line x1="712.0" y1="464" x2="712.0" y2="450" stroke="#7a828b" stroke-width="1.8" />
+  <path d="M 708.0 451 L 716.0 451 L 712.0 444 Z" fill="#7a828b" />
+  <line x1="800.0" y1="464" x2="800.0" y2="450" stroke="#7a828b" stroke-width="1.8" />
+  <path d="M 796.0 451 L 804.0 451 L 800.0 444 Z" fill="#7a828b" />
+  <line x1="888.0" y1="464" x2="888.0" y2="450" stroke="#7a828b" stroke-width="1.8" />
+  <path d="M 884.0 451 L 892.0 451 L 888.0 444 Z" fill="#7a828b" />
+  <text x="660.0" y="481.0" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5b6570" font-weight="600">Token IDs</text>
+  <rect x="682.0" y="466" width="60" height="26" rx="4" fill="#eef3fb" stroke="#b9d3ea" stroke-width="1" />
+  <text x="712.0" y="484.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#1a3d7c" font-weight="700">412</text>
+  <line x1="712.0" y1="508" x2="712.0" y2="498" stroke="#7a828b" stroke-width="1.8" />
+  <path d="M 708.0 499 L 716.0 499 L 712.0 492 Z" fill="#7a828b" />
+  <rect x="770.0" y="466" width="60" height="26" rx="4" fill="#eef3fb" stroke="#b9d3ea" stroke-width="1" />
+  <text x="800.0" y="484.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#1a3d7c" font-weight="700">2087</text>
+  <line x1="800.0" y1="508" x2="800.0" y2="498" stroke="#7a828b" stroke-width="1.8" />
+  <path d="M 796.0 499 L 804.0 499 L 800.0 492 Z" fill="#7a828b" />
+  <rect x="858.0" y="466" width="60" height="26" rx="4" fill="#eef3fb" stroke="#b9d3ea" stroke-width="1" />
+  <text x="888.0" y="484.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#1a3d7c" font-weight="700">3605</text>
+  <line x1="888.0" y1="508" x2="888.0" y2="498" stroke="#7a828b" stroke-width="1.8" />
+  <path d="M 884.0 499 L 892.0 499 L 888.0 492 Z" fill="#7a828b" />
+  <text x="660.0" y="526.0" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#5b6570" font-weight="600">Tokenize (BPE)</text>
+  <rect x="672.0" y="510" width="80" height="28" rx="4" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="712.0" y="529.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#333" font-weight="600">Die</text>
+  <line x1="712.0" y1="562" x2="712.0" y2="544" stroke="#7a828b" stroke-width="1.8" />
+  <path d="M 708.0 545 L 716.0 545 L 712.0 538 Z" fill="#7a828b" />
+  <rect x="760.0" y="510" width="80" height="28" rx="4" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="800.0" y="529.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#333" font-weight="600">ĠKatze</text>
+  <line x1="800.0" y1="562" x2="800.0" y2="544" stroke="#7a828b" stroke-width="1.8" />
+  <path d="M 796.0 545 L 804.0 545 L 800.0 538 Z" fill="#7a828b" />
+  <rect x="848.0" y="510" width="80" height="28" rx="4" fill="#ffffff" stroke="#9aa4ad" stroke-width="1" />
+  <text x="888.0" y="529.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#333" font-weight="600">Ġsaß</text>
+  <line x1="888.0" y1="562" x2="888.0" y2="544" stroke="#7a828b" stroke-width="1.8" />
+  <path d="M 884.0 545 L 892.0 545 L 888.0 538 Z" fill="#7a828b" />
+  </svg></figure>
+<p class="c">This decoder column = GPT input-prep for “Die Katze saß” · Ġ = leading space · toy IDs (GPT-2 really splits it: Die · ĠKat · ze · Ġsa · ß) · book Fig 2.15</p>
+<figure class="dg" style="--w:1060"><svg xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI, Helvetica, Arial, sans-serif" viewBox="30 628 1060 16" class="g1" role="img"><line x1="40" y1="636" x2="1080" y2="636" stroke="#dcdfe3" stroke-width="1.5" />
+  
+
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  </svg></figure>
+</section><div class="notes">
+<ul>
+<li><strong>Encoder (left)</strong>: reads the English source, &quot;The cat sat on the wall.&quot;</li>
+<li><strong>Decoder (right)</strong>: reads and writes German only. Its input is the German it has produced so far, &quot;Die Katze saß&quot;,
+which gets tokenized, turned into IDs and embedded exactly like box 6 shows, just with
+German tokens.</li>
+<li><strong>Cross-attention (the 4 → 7 arrow)</strong>: this is the only place the two languages meet. The decoder looks at the
+encoder's English embeddings to decide which German token comes next. That link is the
+translation.</li>
+</ul>
+<hr />
+<h2 id="n-key">Key</h2>
+<p><strong>1. Input text</strong> — the full source sentence to be translated, e.g. <em>&quot;The cat sat on the wall.&quot;</em></p>
+<p><strong>2. Preprocessing (encoder)</strong> — turns raw text into vectors the model can work with. It has three inner steps (a → b →
+c), described in the next section.</p>
+<p><strong>3. Encoder</strong> — reads <strong>all tokens at once</strong> (parallel, not word-by-word) and makes each embedding <em>context-aware</em> via
+self-attention. The only loop here is over the stacked layers, not over words:</p>
+<pre><code class="language-python">x = embed(tokens) + positional_info
+for layer in encoder_layers:  # e.g. 6–12 blocks
+    x = layer(x)  # self-attention + feed-forward
+return x  # context-rich embeddings
+</code></pre>
+<p><strong>4. Embeddings</strong> — the encoder's context-rich output vectors, handed to the decoder (the arrow crossing to box 7). See
+<em>cross-attention</em> below for how the handoff actually works.</p>
+<p><strong>5. Partial output</strong> — the translation produced so far, e.g. <em>&quot;Das ist ein.&quot;</em></p>
+<p><strong>6. Preprocessing (decoder)</strong> — the same three inner steps as box 2, applied to the partial output.</p>
+<p><strong>7. Decoder</strong> — combines the encoder's embeddings (box 4) with the partial output to predict the next token; runs <strong>one
+token at a time</strong> (autoregressive).</p>
+<p><strong>8. Output layers</strong> — a final linear layer + <strong>softmax</strong> → a probability over the whole vocabulary; the
+highest-probability token is picked (<em>&quot;Beispiel&quot;</em>).</p>
+<p><strong>9. Complete output</strong> — the loop repeats, appending each new token, until the end-of-sequence token (<code>&lt;|endoftext|&gt;</code>).
+Result: <em>&quot;Das ist ein Beispiel.&quot;</em></p>
+<hr />
+<h2 id="n-preprocessing-step-by-step-the-inner-boxes">Preprocessing, step by step (the inner boxes)</h2>
+<p>Preprocessing is where raw text becomes numbers. 97gram splits it into three inner boxes, bottom to top:</p>
+<h3>a. Tokenize</h3>
+<p>Split the text into tokens. GPT uses <strong>Byte Pair Encoding (BPE)</strong> — subword chunks rather than whole words. Common words
+stay whole; rare words break into known pieces, so <em>any</em> word can be represented and nothing is thrown away.</p>
+<pre><code class="language-python">tokenizer = tiktoken.get_encoding(&quot;gpt2&quot;)
+ids = tokenizer.encode(text)  # subword IDs, no &lt;|unk|&gt;
+</code></pre>
+<p>(Contrast with the book's hand-built <code>SimpleTokenizerV2</code>, a plain <strong>word-level</strong> tokenizer backed by a Python
+dictionary — anything unseen collapses to a single <code>&lt;|unk|&gt;</code>. BPE exists precisely to avoid that.)</p>
+<h3>b. Convert to dictionary integer IDs</h3>
+<p>Each token is looked up in the vocabulary and replaced by its <strong>integer ID</strong> — a simple dictionary lookup (<code>str → int</code>).
+At this point the sentence is just a list of integers.</p>
+<h3>c. Embedding + positional encoding</h3>
+<p>Two things happen here:</p>
+<ul>
+<li><p><strong>Embedding.</strong> The <em>embedding model</em> converts raw input (a token ID) into a <strong>vector representation</strong>. Mechanically
+it's a learnable lookup table of shape <code>(vocab_size × embedding_dim)</code>: token ID 42 → grab row 42 → that's its vector.
+The numbers start random and are <strong>learned during training</strong> — exactly like the weights in your MNIST network — so
+tokens used in similar contexts end up with similar vectors.</p>
+<p><strong>Why a lookup == a matrix multiply (the one-hot view):</strong> picture the token ID as a <strong>one-hot</strong> row vector (a single
+<code>1</code> at the ID's position, zeros elsewhere). Multiply it by the embedding matrix <code>W (vocab_size × dim)</code> and the <code>1</code>
+selects exactly one row — the same vector the lookup returns. That's the MNIST bridge: your digit net multiplied a
+pixel vector by a weight matrix; here the token ID <em>is</em> the one-hot selector, so an embedding layer is <strong>“just a
+linear layer.”</strong></p>
+<p>For a <strong>whole sentence</strong> the picture stacks: several one-hot rows form a matrix <code>(seq_len × vocab_size)</code>, and one
+matmul with the <em>same</em> <code>W</code> yields a stack of embedding rows <code>(seq_len × dim)</code> — the column of Token IDs in Figure 2.15
+becoming its column of embedding boxes, in a single operation. (In practice the model skips building the one-hot
+vectors and does a table lookup — same result, far cheaper.)</p>
+</li>
+</ul>
+</div><section class="fig" id="g2" data-label="one_hot_lookup"><h2>An embedding lookup IS a matrix multiply</h2><p class="src">one_hot_lookup.svg</p>
+<p class="lead">a sentence = stacked one-hot rows × embedding matrix = the selected rows</p>
+<figure class="dg" style="--w:536"><svg xmlns="http://www.w3.org/2000/svg" viewBox="30 71 536 290" class="g2" role="img"><text x="46" y="92" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#1a3d7c" font-weight="600">Many words (stacked)</text><text x="46" y="110" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#5b6570" font-weight="400">token IDs = [3, 0, 5]</text><rect x="40" y="150" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="55.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="70" y="150" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="85.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="100" y="150" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="115.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="130" y="150" width="30" height="30" rx="3" fill="#fff7e6" stroke="#d9b45f" stroke-width="1.2" /><text x="145.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8a6d1f" font-weight="700">1</text><rect x="160" y="150" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="175.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="190" y="150" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="205.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="40" y="180" width="30" height="30" rx="3" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2" /><text x="55.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a3d7c" font-weight="700">1</text><rect x="70" y="180" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="85.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="100" y="180" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="115.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="130" y="180" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="145.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="160" y="180" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="175.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="190" y="180" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="205.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="40" y="210" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="55.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="70" y="210" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="85.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="100" y="210" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="115.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="130" y="210" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="145.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="160" y="210" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="175.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#b9c0c8" font-weight="400">0</text><rect x="190" y="210" width="30" height="30" rx="3" fill="#fdeef0" stroke="#cf7a86" stroke-width="1.2" /><text x="205.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8c3b46" font-weight="700">1</text><text x="130.0" y="260" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5b6570" font-weight="400">one-hot rows   (3 × 6)</text><text x="244" y="202.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="22" fill="#5b6570">×</text><rect x="268" y="150" width="30" height="30" rx="3" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2" /><text x="283.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a3d7c" font-weight="400">.2</text><rect x="298" y="150" width="30" height="30" rx="3" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2" /><text x="313.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a3d7c" font-weight="400">.9</text><rect x="328" y="150" width="30" height="30" rx="3" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2" /><text x="343.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a3d7c" font-weight="400">.1</text><rect x="358" y="150" width="30" height="30" rx="3" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2" /><text x="373.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a3d7c" font-weight="400">.4</text><rect x="268" y="180" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="283.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.7</text><rect x="298" y="180" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="313.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.3</text><rect x="328" y="180" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="343.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.8</text><rect x="358" y="180" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="373.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.2</text><rect x="268" y="210" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="283.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.5</text><rect x="298" y="210" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="313.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.5</text><rect x="328" y="210" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="343.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.1</text><rect x="358" y="210" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="373.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.9</text><rect x="268" y="240" width="30" height="30" rx="3" fill="#fff7e6" stroke="#d9b45f" stroke-width="1.2" /><text x="283.0" y="258.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8a6d1f" font-weight="400">.8</text><rect x="298" y="240" width="30" height="30" rx="3" fill="#fff7e6" stroke="#d9b45f" stroke-width="1.2" /><text x="313.0" y="258.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8a6d1f" font-weight="400">.2</text><rect x="328" y="240" width="30" height="30" rx="3" fill="#fff7e6" stroke="#d9b45f" stroke-width="1.2" /><text x="343.0" y="258.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8a6d1f" font-weight="400">.6</text><rect x="358" y="240" width="30" height="30" rx="3" fill="#fff7e6" stroke="#d9b45f" stroke-width="1.2" /><text x="373.0" y="258.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8a6d1f" font-weight="400">.3</text><rect x="268" y="270" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="283.0" y="288.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.1</text><rect x="298" y="270" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="313.0" y="288.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.4</text><rect x="328" y="270" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="343.0" y="288.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.7</text><rect x="358" y="270" width="30" height="30" rx="3" fill="#ffffff" stroke="#9aa4ad" stroke-width="1.2" /><text x="373.0" y="288.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#444" font-weight="400">.5</text><rect x="268" y="300" width="30" height="30" rx="3" fill="#fdeef0" stroke="#cf7a86" stroke-width="1.2" /><text x="283.0" y="318.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8c3b46" font-weight="400">.3</text><rect x="298" y="300" width="30" height="30" rx="3" fill="#fdeef0" stroke="#cf7a86" stroke-width="1.2" /><text x="313.0" y="318.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8c3b46" font-weight="400">.6</text><rect x="328" y="300" width="30" height="30" rx="3" fill="#fdeef0" stroke="#cf7a86" stroke-width="1.2" /><text x="343.0" y="318.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8c3b46" font-weight="400">.2</text><rect x="358" y="300" width="30" height="30" rx="3" fill="#fdeef0" stroke="#cf7a86" stroke-width="1.2" /><text x="373.0" y="318.9" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8c3b46" font-weight="400">.8</text><text x="328.0" y="350" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5b6570" font-weight="400">W   (6 × 4)</text><text x="396" y="140" text-anchor="start" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#b9c0c8" font-weight="400">vocab_size rows</text><text x="412" y="202.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="22" fill="#5b6570">=</text><rect x="436" y="150" width="30" height="30" rx="3" fill="#fff7e6" stroke="#d9b45f" stroke-width="1.2" /><text x="451.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8a6d1f" font-weight="600">.8</text><rect x="466" y="150" width="30" height="30" rx="3" fill="#fff7e6" stroke="#d9b45f" stroke-width="1.2" /><text x="481.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8a6d1f" font-weight="600">.2</text><rect x="496" y="150" width="30" height="30" rx="3" fill="#fff7e6" stroke="#d9b45f" stroke-width="1.2" /><text x="511.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8a6d1f" font-weight="600">.6</text><rect x="526" y="150" width="30" height="30" rx="3" fill="#fff7e6" stroke="#d9b45f" stroke-width="1.2" /><text x="541.0" y="168.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8a6d1f" font-weight="600">.3</text><rect x="436" y="180" width="30" height="30" rx="3" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2" /><text x="451.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a3d7c" font-weight="600">.2</text><rect x="466" y="180" width="30" height="30" rx="3" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2" /><text x="481.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a3d7c" font-weight="600">.9</text><rect x="496" y="180" width="30" height="30" rx="3" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2" /><text x="511.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a3d7c" font-weight="600">.1</text><rect x="526" y="180" width="30" height="30" rx="3" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2" /><text x="541.0" y="198.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#1a3d7c" font-weight="600">.4</text><rect x="436" y="210" width="30" height="30" rx="3" fill="#fdeef0" stroke="#cf7a86" stroke-width="1.2" /><text x="451.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8c3b46" font-weight="600">.3</text><rect x="466" y="210" width="30" height="30" rx="3" fill="#fdeef0" stroke="#cf7a86" stroke-width="1.2" /><text x="481.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8c3b46" font-weight="600">.6</text><rect x="496" y="210" width="30" height="30" rx="3" fill="#fdeef0" stroke="#cf7a86" stroke-width="1.2" /><text x="511.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8c3b46" font-weight="600">.2</text><rect x="526" y="210" width="30" height="30" rx="3" fill="#fdeef0" stroke="#cf7a86" stroke-width="1.2" /><text x="541.0" y="228.8" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" fill="#8c3b46" font-weight="600">.8</text><text x="496.0" y="260" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5b6570" font-weight="400">embeddings   (3 × 4)</text></svg></figure>
+<div class="callout" style="--cb:rgb(251, 252, 254);--cs:rgb(219, 228, 240)"><p class="c">Each one-hot row&#x27;s single 1 selects one row of W — so the whole sentence is one matmul.<br>The model never builds the one-hot rows; a table lookup gives the same result, far cheaper.</p></div>
+</section><div class="notes">
+<ul>
+<li><strong>Positional encoding.</strong> A position vector is <em>added</em> to each token embedding (see next section).</li>
+</ul>
+<blockquote>
+<p><strong>Worked example (Fig 2.15).</strong> The decoder side of the diagram at the top runs this whole stack (a → b → c) on
+<em>&quot;Die Katze saß&quot;</em> with whole-word tokens, toy IDs and toy 3-dim embeddings, ending in the input embeddings that enter
+the decoder.</p>
+</blockquote>
+<p>FOR LATER:</p>
+<ol>
+<li>Do we need the&quot; Zoom in: the mechanisms&quot; section?</li>
+<li>The embedding lookup is a matrix multiply (1 hot) diagram is too big and has too much whitespace</li>
+<li>&quot;Embedding + positional encoding Two things happen here:&quot; paragraph is too long</li>
+<li>Consider making it a html page that only scrolls the text but keeps main diagram in view? (what about 2nd diagram</li>
+</ol>
+<hr />
+<h2 id="n-positional-encoding-how-it-s-done">Positional encoding — how it's done</h2>
+<p><strong>The problem:</strong> self-attention treats its input as a <em>set</em>, not a <em>sequence</em> — on its own it has no idea which token
+came first. Without position information, <em>&quot;dog bites man&quot;</em> and <em>&quot;man bites dog&quot;</em> would look identical to the model.</p>
+<p><strong>The fix:</strong> give every <strong>position</strong> its own vector (a <em>positional embedding</em>), and simply <strong>add</strong> it,
+element-by-element, to the token embedding at that position. The sum is the <em>input embedding</em> that actually enters the
+encoder/decoder:</p>
+<ul>
+<li><strong>Token embedding</strong> is indexed by which token (row = token ID). Same token → same vector, no matter where it sits.</li>
+<li><strong>Positional embedding</strong> is indexed by which position (row = 0, 1, 2, …). Same position → same vector, no matter which
+token sits there.</li>
+</ul>
+<pre><code>input embedding[i] = token embedding[i] + positional embedding[i]
+</code></pre>
+<p>A tiny illustration, with token embeddings all set to <code>1</code> just to keep it readable (the decoder worked example above
+uses the same idea with real token vectors):</p>
+<table>
+<thead>
+<tr>
+  <th>Position</th>
+  <th>Token embedding</th>
+  <th>Positional embedding</th>
+  <th>Input embedding (sum)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Token 1</td>
+  <td><code>1, 1, 1</code></td>
+  <td><code>1.1, 1.2, 1.3</code></td>
+  <td><code>2.1, 2.2, 2.3</code></td>
+</tr>
+<tr>
+  <td>Token 2</td>
+  <td><code>1, 1, 1</code></td>
+  <td><code>2.1, 2.2, 2.3</code></td>
+  <td><code>3.1, 3.2, 3.3</code></td>
+</tr>
+<tr>
+  <td>Token 3</td>
+  <td><code>1, 1, 1</code></td>
+  <td><code>3.1, 3.2, 3.3</code></td>
+  <td><code>4.1, 4.2, 4.3</code></td>
+</tr>
+</tbody>
+</table>
+<p>The same token in two different positions now enters the model as two different vectors — that difference is what
+encodes word order.</p>
+<p><strong>Three flavours you'll meet:</strong></p>
+<ul>
+<li><em>Fixed / sinusoidal</em> — the original 2017 transformer computes each position vector from sine and cosine functions.
+No parameters, but it extrapolates poorly beyond the lengths seen in training.</li>
+<li><em>Learned</em> — GPT-2 (and the book) instead make the positional embeddings a <strong>learnable</strong> table, trained just like the
+token embeddings. That's the version implied by the code line <code>embed(tokens) + positional_info</code>. One row per
+position, so the table size caps the context length (GPT-2: 1024).</li>
+<li><em>RoPE (rotary)</em> — used by Llama and most modern LLMs. No table, and nothing is added to the embedding: the attention
+queries and keys are rotated by an angle that depends on each token's position, so attention sees the <em>relative</em>
+distance between tokens. Computed on the fly for any length; very long contexts need extra scaling tricks.</li>
+</ul>
+<hr />
+<h2 id="n-zoom-in-the-mechanisms">Zoom in: the mechanisms</h2>
+<h3>Self-attention → context vectors (inside box 3)</h3>
+<p>How a plain embedding becomes context-aware. Each token compares itself against every other token, gets a relevance
+weight for each, then takes a weighted sum of their information. The output is a <strong>context vector</strong>: <em>&quot;bank&quot;</em> beside
+<em>&quot;river&quot;</em> ends up different from <em>&quot;bank&quot;</em> beside <em>&quot;money.&quot;</em> Every token does this at once — the encoder's parallelism.</p>
+<h3>Softmax (inside box 8)</h3>
+<p>The output layer emits one raw score (a <strong>logit</strong>) per vocabulary token. Softmax squashes those scores into
+probabilities that sum to 1, so the largest is the model's pick — exactly your MNIST final layer, just with ~50,000
+classes instead of 10.</p>
+<h3>Encoder → Decoder: cross-attention (the 4 → 7 arrow)</h3>
+<p>The encoder's output (box 4) is <strong>not copied</strong> into the decoder — it is <em>attended to</em>. Every decoder block runs two
+attention steps:</p>
+<ol>
+<li><strong>Self-attention</strong> over the tokens generated so far (&quot;what have I written?&quot;).</li>
+<li><strong>Cross-attention</strong>, where the decoder forms the <em>queries</em> and the encoder's output supplies the <em>keys</em> and
+<em>values</em> (&quot;what in the source matters right now?&quot;).</li>
+</ol>
+<p>So at each step the decoder re-reads the whole input sentence through cross-attention and blends it with what it has
+produced. That single arrow from 4 to 7 is this cross-attention link.</p>
+<hr />
+<h2 id="n-where-each-half-became-a-real-model-family">Where each half became a real model family</h2>
+<ul>
+<li><strong>BERT (encoder-only)</strong> — trained by masking random words and filling them back in; sees the whole sentence both
+directions at once. Good for <em>understanding</em> (classification, search).</li>
+<li><strong>GPT (decoder-only)</strong> — trained to predict the next word from left context only; generates text one token at a time
+(the loop in boxes 5–9). Good for <em>generating</em>. Visually, GPT is the <strong>right-hand column on its own</strong>: preprocessing →
+decoder → softmax, with the cross-attention arrow (4 → 7) dropped and &quot;Partial output&quot; read as the input text. That
+column is the book's Figure 2.15 input-prep pipeline — and it's drawn as a worked example (real BPE tokens, IDs, and
+embeddings) on the decoder side of the diagram at the top.</li>
+</ul>
+</div>
+</main>
+<script>
+const rootEl=document.documentElement;
+const isDark=()=>rootEl.dataset.theme?rootEl.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+function paintTheme(){document.querySelectorAll('.theme').forEach(b=>b.textContent=b.closest('.topbar')?(isDark()?'☀':'☾'):(isDark()?'☀ Light mode':'☾ Dark mode'));}
+document.querySelectorAll('.theme').forEach(b=>b.addEventListener('click',()=>{
+  const t=isDark()?'light':'dark';rootEl.dataset.theme=t;
+  try{localStorage.setItem('theme',t);}catch(e){}
+  paintTheme();
+}));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',paintTheme);
+paintTheme();
+
+const body=document.body;
+document.querySelector('.topbar button').addEventListener('click',()=>body.classList.toggle('menu-open'));
+document.querySelector('.scrim').addEventListener('click',()=>body.classList.remove('menu-open'));
+document.querySelectorAll('.side a').forEach(a=>a.addEventListener('click',()=>body.classList.remove('menu-open')));
+const links=[...document.querySelectorAll('.side a[href^="#"]')];
+const targets=links.map(a=>document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+function spy(){
+  let cur=targets[0];
+  for(const t of targets){if(t.getBoundingClientRect().top<120)cur=t;}
+  links.forEach(a=>a.classList.toggle('active',cur&&a.getAttribute('href')==='#'+cur.id));
+}
+addEventListener('scroll',spy,{passive:true});spy();
+</script>
+</body>
+</html>

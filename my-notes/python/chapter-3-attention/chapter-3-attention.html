@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapter 3 · Attention</title>
+<style>
+:root{--bg:#fff;--ink:#1c1c1c;--muted:#666;--line:#e5e5e2;--accent:#4f46e5;--soft:#eef0ff;color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:12px}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+nav{position:fixed;inset:0 auto 0 0;width:230px;border-right:1px solid var(--line);padding:18px 12px;overflow-y:auto}
+nav h1{font-size:15px;margin:0 6px 12px}
+nav h4{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:18px 6px 4px}
+nav a{display:block;color:var(--ink);padding:4px 6px;border-radius:5px}
+nav a:hover{background:var(--soft);text-decoration:none}
+nav a.active{background:var(--soft);color:var(--accent);font-weight:600}
+nav a small{display:block;color:var(--muted);font-size:11px;font-weight:400}
+main{margin-left:230px;padding:16px 24px 80px}
+section{max-width:860px;margin:0 auto 40px}
+section header{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:6px;margin-bottom:10px}
+section h2{font-size:13px;margin:0;color:var(--muted);font-weight:600}
+section header p{margin:0;color:var(--muted);font-size:13px;flex:1 1 300px}
+section header 
+section img{display:block;width:100%;height:auto}
+@media (max-width:760px){
+  nav{position:static;width:auto;border-right:0;border-bottom:1px solid var(--line)}
+  main{margin-left:0;padding:12px 16px 60px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <h1>Ch 3 · Attention</h1>
+  <a href="#simple">Self attention simple v2</a>
+  <a href="#qkv">Self attention QKV v4</a>
+  <a href="#matmul">Self attention QKV matmul v4</a>
+  <a href="#wrapper-v2">Multi-head attention wrapper v2</a>
+  <a href="#combined">Multi-head attention combined v1</a>
+  <h4>Interactive</h4>
+  <a href="Multi-head%20attention%20listing%203%205%203D%20v7.html">Listing 3.5 in 3D ↗</a>
+</nav>
+<main>
+  <section id="simple">
+    <header><h2>Self attention simple v2</h2></header>
+    <a href="Self%20attention%20simple%20v2.svg"><img src="Self%20attention%20simple%20v2.svg" alt="Simple self-attention for x2"></a>
+  </section>
+  <section id="qkv">
+    <header><h2>Self attention QKV v4</h2></header>
+    <a href="Self%20attention%20QKV%20v4.svg"><img src="Self%20attention%20QKV%20v4.svg" alt="Self-attention with trainable Q, K, V"></a>
+  </section>
+  <section id="matmul">
+    <header><h2>Self attention QKV matmul v4</h2></header>
+    <a href="Self%20attention%20QKV%20matmul%20v4.svg"><img src="Self%20attention%20QKV%20matmul%20v4.svg" alt="Self-attention as matrix multiplies"></a>
+  </section>
+  <section id="wrapper-v2">
+    <header><h2>Multi-head attention wrapper v2</h2></header>
+    <a href="Multi-head%20attention%20wrapper%20v2.svg"><img src="Multi-head%20attention%20wrapper%20v2.svg" alt="Multi-head attention wrapper v2"></a>
+  </section>
+  <section id="combined">
+    <header><h2>Multi-head attention combined v1</h2></header>
+    <a href="Multi-head%20attention%20combined%20v1.svg"><img src="Multi-head%20attention%20combined%20v1.svg" alt="Combined multi-head attention"></a>
+  </section>
+</main>
+<script>
+const links=[...document.querySelectorAll('nav a[href^="#"]')];
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('active',a.hash==='#'+e.target.id))}),{rootMargin:'-10% 0px -80% 0px'});
+document.querySelectorAll('main section').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

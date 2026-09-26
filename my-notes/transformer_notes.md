@@ -1,26 +1,21 @@
 # The Transformer — Encoder / Decoder (companion notes)
 
-These notes go with the diagram below. The diagram carries the picture; this file carries the words. Numbers (1–9) and
-letters (a/b/c) below match the labels on the diagram. Flow runs **bottom → top**: encoder on the left, decoder on the
-right.
+[//]: # (![The Transformer — Encoder / Decoder]&#40;transformer_diagram_v3.svg&#41;)
+<img src="transformer_diagram_v3.svg" alt="The Transformer — Encoder / Decoder" width="90%">
 
-![The Transformer — Encoder / Decoder](transformer_diagram_v3.svg)
-
-The **decoder side's preprocessing is worked through with a real example** — *"The cat sat."* run through GPT-2 BPE →
-token IDs → token embeddings (+ positional) → input embeddings — so you can see concrete values flowing into the
-decoder. The encoder side keeps the generic step labels.
-
-The token and positional embeddings are two *separate* learned tables, indexed by different things:
-
-- **Token embedding** is indexed by which token (row = token ID). Same token → same vector, no matter where it sits.
-- **Positional embedding** is indexed by which position (row = 0, 1, 2, …). Same position → same vector, no matter which
-  token sits there.
+- **Encoder (left)**: reads the English source, "The cat sat on the wall."
+- **Decoder (right)**: reads and writes German only. Its input is the German it has produced so far, "Die Katze saß",
+  which gets tokenized, turned into IDs and embedded exactly like box 6 shows, just with
+  German tokens.
+- **Cross-attention (the 4 → 7 arrow)**: this is the only place the two languages meet. The decoder looks at the
+  encoder's English embeddings to decide which German token comes next. That link is the
+  translation.
 
 ---
 
 ## Key
 
-**1. Input text** — the full source sentence to be translated, e.g. *"This is an example."*
+**1. Input text** — the full source sentence to be translated, e.g. *"The cat sat on the wall."*
 
 **2. Preprocessing (encoder)** — turns raw text into vectors the model can work with. It has three inner steps (a → b →
 c), described in the next section.
@@ -102,6 +97,14 @@ Two things happen here:
 > *"The cat sat."* with real GPT-2 BPE tokens/IDs and toy 3-dim embeddings, ending in the input embeddings that enter
 > the decoder.
 
+
+FOR LATER:
+1. Do we need the" Zoom in: the mechanisms" section?
+2. The embedding lookup is a matrix multiply (1 hot) diagram is too big and has too much whitespace 
+3. "Embedding + positional encoding Two things happen here:" paragraph is too long
+4. Consider making it a html page that only scrolls the text but keeps main diagram in view? (what about 2nd diagram
+
+
 ---
 
 ## Positional encoding — how it's done
@@ -112,6 +115,10 @@ came first. Without position information, *"dog bites man"* and *"man bites dog"
 **The fix:** give every **position** its own vector (a *positional embedding*), and simply **add** it,
 element-by-element, to the token embedding at that position. The sum is the *input embedding* that actually enters the
 encoder/decoder:
+
+- **Token embedding** is indexed by which token (row = token ID). Same token → same vector, no matter where it sits.
+- **Positional embedding** is indexed by which position (row = 0, 1, 2, …). Same position → same vector, no matter which
+  token sits there.
 
 ```
 input embedding[i] = token embedding[i] + positional embedding[i]
@@ -129,12 +136,16 @@ uses the same idea with real token vectors):
 The same token in two different positions now enters the model as two different vectors — that difference is what
 encodes word order.
 
-**Two flavours you'll meet:**
+**Three flavours you'll meet:**
 
 - *Fixed / sinusoidal* — the original 2017 transformer computes each position vector from sine and cosine functions.
-  Nothing to learn; works for any length.
+  No parameters, but it extrapolates poorly beyond the lengths seen in training.
 - *Learned* — GPT-2 (and the book) instead make the positional embeddings a **learnable** table, trained just like the
-  token embeddings. That's the version implied by the code line `embed(tokens) + positional_info`.
+  token embeddings. That's the version implied by the code line `embed(tokens) + positional_info`. One row per
+  position, so the table size caps the context length (GPT-2: 1024).
+- *RoPE (rotary)* — used by Llama and most modern LLMs. No table, and nothing is added to the embedding: the attention
+  queries and keys are rotated by an angle that depends on each token's position, so attention sees the *relative*
+  distance between tokens. Computed on the fly for any length; very long contexts need extra scaling tricks.
 
 ---
 
@@ -143,8 +154,8 @@ encodes word order.
 ### Self-attention → context vectors (inside box 3)
 
 How a plain embedding becomes context-aware. Each token compares itself against every other token, gets a relevance
-weight for each, then takes a weighted sum of their information. The output is a **context vector**: *"bank"* beside *"
-river"* ends up different from *"bank"* beside *"money."* Every token does this at once — the encoder's parallelism.
+weight for each, then takes a weighted sum of their information. The output is a **context vector**: *"bank"* beside
+*"river"* ends up different from *"bank"* beside *"money."* Every token does this at once — the encoder's parallelism.
 
 ### Softmax (inside box 8)
 
@@ -170,8 +181,8 @@ produced. That single arrow from 4 to 7 is this cross-attention link.
 
 - **BERT (encoder-only)** — trained by masking random words and filling them back in; sees the whole sentence both
   directions at once. Good for *understanding* (classification, search).
-- **GPT (decoder-only)** — trained to predict the next word from left context only; generates text one token at a time (
-  the loop in boxes 5–9). Good for *generating*. Visually, GPT is the **right-hand column on its own**: preprocessing →
+- **GPT (decoder-only)** — trained to predict the next word from left context only; generates text one token at a time
+  (the loop in boxes 5–9). Good for *generating*. Visually, GPT is the **right-hand column on its own**: preprocessing →
   decoder → softmax, with the cross-attention arrow (4 → 7) dropped and "Partial output" read as the input text. That
   column is the book's Figure 2.15 input-prep pipeline — and it's drawn as a worked example (real BPE tokens, IDs, and
   embeddings) on the decoder side of the diagram at the top.
