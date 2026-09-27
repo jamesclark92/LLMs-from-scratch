@@ -1,0 +1,177 @@
+<svg width="100%" viewBox="0 0 940 720" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Input preparation: text to input embeddings</title><rect width="940" height="720" fill="#fff"/>
+<text x="470.0" y="32" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" fill="#1a3d7c" font-weight="600">From text to input embeddings (GPT-2)</text>
+<text x="470.0" y="52" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#5b6570" font-weight="400">Flow runs bottom → top · every step keeps one column per token</text>
+<rect x="385" y="72" width="120" height="28" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="445" y="91" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="400">Output text</text>
+<text x="190" y="92" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="600">Output text</text>
+<text x="715" y="86" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1f3a8a" font-weight="400">tokenizer.decode(...)</text>
+<text x="715" y="101" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" fill="#5b6570" font-weight="400">(ch 5)</text>
+<line x1="445" y1="130" x2="445" y2="108" stroke="#555" stroke-width="1.4"/><path d="M441 109L445 102L449 109Z" fill="#555"/>
+<rect x="365" y="132" width="160" height="28" rx="4" fill="#f6f7f9" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="445" y="151" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="400">Postprocessing</text>
+<text x="190" y="152" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="600">Postprocessing</text>
+<text x="715" y="146" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1f3a8a" font-weight="400">logits → next token ID</text>
+<text x="715" y="161" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" fill="#5b6570" font-weight="400">(ch 4–5)</text>
+<line x1="445" y1="192" x2="445" y2="168" stroke="#555" stroke-width="1.4"/><path d="M441 169L445 162L449 169Z" fill="#555"/>
+<rect x="215" y="192" width="460" height="72" rx="16" fill="#fef3c7" stroke="#d9b45f" stroke-width="1.6"/>
+<text x="445" y="222" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" fill="#5a4a12" font-weight="700">GPT-like decoder-only transformer</text>
+<text x="445" y="244" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12.5" fill="#5a4a12" font-weight="400">attention (ch 3) · transformer blocks (ch 4)</text>
+<text x="715" y="222" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1f3a8a" font-weight="400">model(x)</text>
+<text x="715" y="237" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" fill="#5b6570" font-weight="400">(ch 3–4)</text>
+<text x="190" y="304" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#5b3fc4" font-weight="600">= Input embeddings</text>
+<rect x="222" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="233" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.2</text>
+<rect x="244" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="255" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.8</text>
+<rect x="266" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="277" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.3</text>
+<rect x="317" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="328" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.6</text>
+<rect x="339" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="350" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.4</text>
+<rect x="361" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="372" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">1.1</text>
+<rect x="412" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="423" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">1.1</text>
+<rect x="434" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="445" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.7</text>
+<rect x="456" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="467" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.6</text>
+<rect x="507" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="518" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.6</text>
+<rect x="529" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="540" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">1.0</text>
+<rect x="551" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="562" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">1.0</text>
+<rect x="602" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="613" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.5</text>
+<rect x="624" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="635" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.6</text>
+<rect x="646" y="289" width="22" height="22" rx="2" fill="#efeafd" stroke="#7c6fd6" stroke-width="1.2"/>
+<text x="657" y="304" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">1.5</text>
+<text x="715" y="298" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1f3a8a" font-weight="400">x = tok + pos</text>
+<text x="715" y="313" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" fill="#5b6570" font-weight="400">(5, 3) → into the model</text>
+<line x1="255" y1="287" x2="255" y2="272" stroke="#555" stroke-width="1.4"/><path d="M251 273L255 266L259 273Z" fill="#555"/>
+<line x1="350" y1="287" x2="350" y2="272" stroke="#555" stroke-width="1.4"/><path d="M346 273L350 266L354 273Z" fill="#555"/>
+<line x1="445" y1="287" x2="445" y2="272" stroke="#555" stroke-width="1.4"/><path d="M441 273L445 266L449 273Z" fill="#555"/>
+<line x1="540" y1="287" x2="540" y2="272" stroke="#555" stroke-width="1.4"/><path d="M536 273L540 266L544 273Z" fill="#555"/>
+<line x1="635" y1="287" x2="635" y2="272" stroke="#555" stroke-width="1.4"/><path d="M631 273L635 266L639 273Z" fill="#555"/>
+<line x1="210" y1="322" x2="680" y2="322" stroke="#bfc5cc" stroke-dasharray="3 3"/>
+<text x="190" y="354" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#2f8a3a" font-weight="600">+ Positional emb.</text>
+<rect x="222" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="233" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.0</text>
+<rect x="244" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="255" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.1</text>
+<rect x="266" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="277" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.2</text>
+<text x="255" y="376" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b6570" font-weight="400">pos 0</text>
+<rect x="317" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="328" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.1</text>
+<rect x="339" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="350" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.2</text>
+<rect x="361" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="372" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.3</text>
+<text x="350" y="376" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b6570" font-weight="400">pos 1</text>
+<rect x="412" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="423" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.2</text>
+<rect x="434" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="445" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.3</text>
+<rect x="456" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="467" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.4</text>
+<text x="445" y="376" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b6570" font-weight="400">pos 2</text>
+<rect x="507" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="518" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.3</text>
+<rect x="529" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="540" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.4</text>
+<rect x="551" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="562" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.5</text>
+<text x="540" y="376" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b6570" font-weight="400">pos 3</text>
+<rect x="602" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="613" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.4</text>
+<rect x="624" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="635" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.5</text>
+<rect x="646" y="339" width="22" height="22" rx="2" fill="#e3f4e4" stroke="#2f8a3a" stroke-width="1.2"/>
+<text x="657" y="354" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.6</text>
+<text x="635" y="376" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#5b6570" font-weight="400">pos 4</text>
+<text x="715" y="348" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1f3a8a" font-weight="400">pos_emb(torch.arange(5))</text>
+<text x="715" y="363" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" fill="#5b6570" font-weight="400">(5, 3) · row = position</text>
+<text x="190" y="416" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#2f6fb3" font-weight="600">Token embeddings</text>
+<rect x="222" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="233" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.2</text>
+<rect x="244" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="255" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.7</text>
+<rect x="266" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="277" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.1</text>
+<rect x="317" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="328" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.5</text>
+<rect x="339" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="350" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.2</text>
+<rect x="361" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="372" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.8</text>
+<rect x="412" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="423" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.9</text>
+<rect x="434" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="445" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.4</text>
+<rect x="456" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="467" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.2</text>
+<rect x="507" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="518" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.3</text>
+<rect x="529" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="540" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.6</text>
+<rect x="551" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="562" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.5</text>
+<rect x="602" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="613" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.1</text>
+<rect x="624" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="635" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.1</text>
+<rect x="646" y="401" width="22" height="22" rx="2" fill="#eef3fb" stroke="#2f6fb3" stroke-width="1.2"/>
+<text x="657" y="416" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="10.5" fill="#1c1c1c" font-weight="400">.9</text>
+<text x="715" y="410" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1f3a8a" font-weight="400">tok_emb(ids)</text>
+<text x="715" y="425" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" fill="#5b6570" font-weight="400">(5, 3) · row = token ID</text>
+<line x1="255" y1="467" x2="255" y2="431" stroke="#555" stroke-width="1.4"/><path d="M251 432L255 425L259 432Z" fill="#555"/>
+<line x1="350" y1="467" x2="350" y2="431" stroke="#555" stroke-width="1.4"/><path d="M346 432L350 425L354 432Z" fill="#555"/>
+<line x1="445" y1="467" x2="445" y2="431" stroke="#555" stroke-width="1.4"/><path d="M441 432L445 425L449 432Z" fill="#555"/>
+<line x1="540" y1="467" x2="540" y2="431" stroke="#555" stroke-width="1.4"/><path d="M536 432L540 425L544 432Z" fill="#555"/>
+<line x1="635" y1="467" x2="635" y2="431" stroke="#555" stroke-width="1.4"/><path d="M631 432L635 425L639 432Z" fill="#555"/>
+<text x="190" y="484" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="600">Token IDs</text>
+<rect x="221" y="468" width="68" height="24" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="255" y="485" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="13" fill="#1c1c1c" font-weight="400">1212</text>
+<rect x="316" y="468" width="68" height="24" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="350" y="485" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="13" fill="#1c1c1c" font-weight="400">318</text>
+<rect x="411" y="468" width="68" height="24" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="445" y="485" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="13" fill="#1c1c1c" font-weight="400">281</text>
+<rect x="506" y="468" width="68" height="24" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="540" y="485" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="13" fill="#1c1c1c" font-weight="400">1672</text>
+<rect x="601" y="468" width="68" height="24" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="635" y="485" text-anchor="middle" font-family="Consolas, Menlo, monospace" font-size="13" fill="#1c1c1c" font-weight="400">13</text>
+<text x="715" y="478" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1f3a8a" font-weight="400">ids = tokenizer.encode(text)</text>
+<text x="715" y="493" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" fill="#5b6570" font-weight="400">(5,) · integers</text>
+<line x1="255" y1="535" x2="255" y2="500" stroke="#555" stroke-width="1.4"/><path d="M251 501L255 494L259 501Z" fill="#555"/>
+<line x1="350" y1="535" x2="350" y2="500" stroke="#555" stroke-width="1.4"/><path d="M346 501L350 494L354 501Z" fill="#555"/>
+<line x1="445" y1="535" x2="445" y2="500" stroke="#555" stroke-width="1.4"/><path d="M441 501L445 494L449 501Z" fill="#555"/>
+<line x1="540" y1="535" x2="540" y2="500" stroke="#555" stroke-width="1.4"/><path d="M536 501L540 494L544 501Z" fill="#555"/>
+<line x1="635" y1="535" x2="635" y2="500" stroke="#555" stroke-width="1.4"/><path d="M631 501L635 494L639 501Z" fill="#555"/>
+<text x="190" y="552" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="600">Tokenized text</text>
+<rect x="229.0" y="536" width="52" height="24" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="255" y="553" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="400" font-style="italic">This</text>
+<rect x="328.5" y="536" width="43" height="24" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="350" y="553" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="400" font-style="italic">Ġis</text>
+<rect x="423.5" y="536" width="43" height="24" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="445" y="553" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="400" font-style="italic">Ġan</text>
+<rect x="496.0" y="536" width="88" height="24" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="540" y="553" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="400" font-style="italic">Ġexample</text>
+<rect x="615.0" y="536" width="40" height="24" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="635" y="553" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="400" font-style="italic">.</text>
+<text x="715" y="546" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1f3a8a" font-weight="400">tiktoken "gpt2" BPE</text>
+<text x="715" y="561" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11" fill="#5b6570" font-weight="400">Ġ = leading space</text>
+<line x1="445" y1="607" x2="445" y2="568" stroke="#555" stroke-width="1.4"/><path d="M441 569L445 562L449 569Z" fill="#555"/>
+<text x="190" y="626" text-anchor="end" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#1c1c1c" font-weight="600">Input text</text>
+<rect x="360" y="608" width="170" height="28" rx="4" fill="#fff" stroke="#9aa4ad" stroke-width="1.2"/>
+<text x="445" y="627" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13.5" fill="#1c1c1c" font-weight="400">This is an example.</text>
+<text x="715" y="620" text-anchor="start" font-family="Consolas, Menlo, monospace" font-size="11.5" fill="#1f3a8a" font-weight="400">text = "This is an example."</text>
+<path d="M34 286H26V636H34" fill="none" stroke="#2f8a3a" stroke-width="1.6"/>
+<text x="20" y="461.0" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#2f8a3a" font-weight="600" transform="rotate(-90 20 461.0)">Chapter 2</text>
+<text x="470.0" y="692" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5b6570" font-weight="400">IDs are real GPT-2 BPE IDs. Embeddings are toy 3-dim values (GPT-2 uses 768); both tables are learned in training.</text>
+<text x="470.0" y="708" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11.5" fill="#5b6570" font-weight="400">Same token → same blue row wherever it appears; same position → same green row whatever the token.</text>
+</svg>

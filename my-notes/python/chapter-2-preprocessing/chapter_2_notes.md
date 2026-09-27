@@ -2,7 +2,7 @@
 
 ## The input-prep pipeline (chapter overview)
 
-![Input preparation: text → tokens → token IDs → embeddings](figure_2_15_input_prep.png)
+![Input preparation: text → tokens → token IDs → embeddings](input_prep_pipeline.svg)
 
 Everything in this chapter is one leg of this chain:
 

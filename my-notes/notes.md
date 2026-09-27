@@ -73,7 +73,7 @@ GPT = **the right-hand column on its own**: preprocessing → decoder → softma
 
 Chapter 2 builds everything to the left of the attention box: **text → tokens → token IDs → input embeddings**, plus the machinery that chops text into training examples.
 
-<figure><img src="python/chapter-2-preprocessing/figure_2_15_input_prep.png" alt="Figure 2.15 input preparation pipeline"></figure>
+<figure class="dg"><img src="python/chapter-2-preprocessing/input_prep_pipeline.svg" alt="From text to input embeddings: text, tokens, IDs, token + positional embeddings"></figure>
 
 ## Key terms
 
